@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../../utils/api";
-import { today } from "../../utils/date-time";
+import { today, currentTime } from "../../utils/date-time";
 import ErrorAlert from "../../layout/ErrorAlert";
 
 function ReservationForm() {
@@ -23,18 +23,30 @@ function ReservationForm() {
 
   const [formData, setFormData] = useState(initialData);
 
-  //Changes the data values dynamically
+  //Changes the data values dynamically if all validation passes; otherwise, display an error message
   const changeHandler = ({ target }) => {
+    let errors = "";
+    if (target.name === "reservation_date") {
+      if (new Date(target.value).getDay() === 1) {
+        errors =
+          "Our restaurant is closed on Tuesdays. Please select a different day.";
+      }
+      if (
+        target.value < today() ||
+        (target.value === today() && formData.reservation_time <= currentTime())
+      ) {
+        errors +=
+          ` The reservation date cannot be in the past. Please pick a date in the future.`;
+      } else {
+        setError(null);
+      }
+      if (errors.length) {
+        setError({ message: errors });
+      }
+    }
     setFormData({
       ...formData,
       [target.name]: target.value,
-    });
-  };
-
-  const peopleHandler = ({ target }) => {
-    setFormData({
-      ...formData,
-      [target.name]: parseInt(target.value),
     });
   };
 
@@ -42,9 +54,14 @@ function ReservationForm() {
   const submitHandler = (event) => {
     event.preventDefault();
 
-    // if validation didn't pass, use window object to alert without submitting
-    createReservation(formData);
+    if(!error) {
+    createReservation({
+      ...formData,
+      people: Number(formData.people),
+    });
+  
     history.push(`/dashboard?date=${formData.reservation_date}`);
+  }
   };
 
   return (
@@ -120,7 +137,7 @@ function ReservationForm() {
               id="people"
               name="people"
               type="number"
-              onChange={peopleHandler}
+              onChange={changeHandler}
               value={formData.people}
             />
           </div>

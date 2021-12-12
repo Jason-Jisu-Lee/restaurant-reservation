@@ -80,3 +80,10 @@ export function next(currentDate) {
   date.setDate(date.getDate() + 1);
   return asDateString(date);
 }
+
+
+// Get current time in timeFormat
+export function currentTime() {
+  return formatAsTime(new Date().toTimeString());
+}
+

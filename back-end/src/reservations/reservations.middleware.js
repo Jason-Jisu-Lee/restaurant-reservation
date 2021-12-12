@@ -1,3 +1,23 @@
+const timeFormat = /\d\d:\d\d/;
+
+function asDateString(date) {
+  return `${date.getFullYear().toString(10)}-${(date.getMonth() + 1)
+    .toString(10)
+    .padStart(2, "0")}-${date.getDate().toString(10).padStart(2, "0")}`;
+}
+
+function today() {
+  return asDateString(new Date());
+}
+
+function formatAsTime(timeString) {
+  return timeString.match(timeFormat)[0];
+}
+
+function currentTime() {
+  return formatAsTime(new Date().toTimeString());
+}
+
 function validateProperties(req, res, next) {
   const { data = {} } = req.body;
 
@@ -44,12 +64,31 @@ function validateProperties(req, res, next) {
     });
   }
 
+  // Checks whether 'reservation_date' property is a Tuesday
+  if (new Date(data.reservation_date).getDay() === 1) {
+    return next({
+      status: 400,
+      message: `Our restaurant is closed on Tuesdays. Please enter a valid date for the 'reservation_date' property: ${data.reservation_date}`,
+    });
+  }
+
   // Checks whether 'reservation_time' property is valid
-  console.log(data.reservation_time)
   if (!data.reservation_time || !data.reservation_time.match(/\d\d:\d\d/)) {
     return next({
       status: 400,
       message: `Please enter a valid 'reservation_time' property: ${data.reservation_time}`,
+    });
+  }
+
+  // Checks whether 'reservation_date' property is in the past
+  if (
+    data.reservation_date < today() ||
+    (data.reservation_date === today() &&
+      data.reservation_time <= currentTime())
+  ) {
+    return next({
+      status: 400,
+      message: `The reservation date cannot be in the past. Please pick a date in the future.`,
     });
   }
 

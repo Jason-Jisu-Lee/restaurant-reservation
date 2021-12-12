@@ -3,7 +3,6 @@ import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { previous, next, today } from "../utils/date-time";
 import useQuery from "../utils/useQuery";
-import ReservationList from "./reservation/ReservationList"
 import {useHistory} from "react-router-dom"
 
 function Dashboard() {
@@ -72,7 +71,6 @@ function Dashboard() {
         </button>
       </div>
     <div>
-      <ReservationList reservations={reservations}/>
     </div>
 
     </main>
