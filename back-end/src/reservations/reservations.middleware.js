@@ -15,7 +15,11 @@ function formatAsTime(timeString) {
 }
 
 function currentTime() {
-  return formatAsTime(new Date().toTimeString());
+  return formatAsTime(
+    new Date().toLocaleString("en-US-u-hc-h24", {
+      timeZone: "America/New_York",
+    })
+  );
 }
 
 function validateProperties(req, res, next) {
@@ -72,14 +76,6 @@ function validateProperties(req, res, next) {
     });
   }
 
-  // Checks whether 'reservation_time' property is valid
-  if (!data.reservation_time || !data.reservation_time.match(/\d\d:\d\d/)) {
-    return next({
-      status: 400,
-      message: `Please enter a valid 'reservation_time' property: ${data.reservation_time}`,
-    });
-  }
-
   // Checks whether 'reservation_date' property is in the past
   if (
     data.reservation_date < today() ||
@@ -92,6 +88,26 @@ function validateProperties(req, res, next) {
     });
   }
 
+  // Checks whether 'reservation_time' property is valid
+  if (!data.reservation_time || !data.reservation_time.match(/\d\d:\d\d/)) {
+    return next({
+      status: 400,
+      message: `Please enter a valid 'reservation_time' property: ${data.reservation_time}`,
+    });
+  }
+
+  // Checks whether 'reservation_time' property is between 9:30 PM and 10:30 AM and displays error if so
+  const requestedTime = new Date(
+    data.reservation_date + " " + data.reservation_time
+  );
+  const openingTime = new Date(data.reservation_date + " " + "10:30:00");
+  const lastCallTime = new Date(data.reservation_date + " " + "21:30:00");
+  if (requestedTime < openingTime || requestedTime > lastCallTime) {
+    return next({
+      status: 400,
+      message: `Please select a time between 10:30 AM (restaurant closes) and 9:30 PM (last call before closing at 10:30 PM); Time Requested: ${data.reservation_time}`
+    })
+  }
   return next();
 }
 

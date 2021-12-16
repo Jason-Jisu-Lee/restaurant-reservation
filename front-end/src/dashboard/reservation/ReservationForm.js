@@ -5,17 +5,16 @@ import { today, currentTime } from "../../utils/date-time";
 import ErrorAlert from "../../layout/ErrorAlert";
 
 function ReservationForm() {
-  //Formats reservation date to set default value to today
-  const date = today();
+  // Formats reservation date to set default value to today
 
   const history = useHistory();
   const [error, setError] = useState(null);
 
-  //Default form data properties
+  // Default form data properties
   const initialData = {
     first_name: "",
     last_name: "",
-    reservation_date: date,
+    reservation_date: "",
     reservation_time: "17:00",
     mobile_number: "",
     people: 1,
@@ -23,45 +22,64 @@ function ReservationForm() {
 
   const [formData, setFormData] = useState(initialData);
 
-  //Changes the data values dynamically if all validation passes; otherwise, display an error message
+  // Changes the data values dynamically
   const changeHandler = ({ target }) => {
-    let errors = "";
-    if (target.name === "reservation_date") {
-      if (new Date(target.value).getDay() === 1) {
-        errors =
-          "Our restaurant is closed on Tuesdays. Please select a different day.";
-      }
-      if (
-        target.value < today() ||
-        (target.value === today() && formData.reservation_time <= currentTime())
-      ) {
-        errors +=
-          ` The reservation date cannot be in the past. Please pick a date in the future.`;
-      } else {
-        setError(null);
-      }
-      if (errors.length) {
-        setError({ message: errors });
-      }
-    }
     setFormData({
       ...formData,
       [target.name]: target.value,
     });
   };
 
-  //Saves the form data and display /dashboard page for the date of the new reservation
+  // Saves the form data and displays /dashboard page for the date of the new reservation,
+  // but displays an error message if any validation fails
   const submitHandler = (event) => {
     event.preventDefault();
+    let errors = "";
 
-    if(!error) {
-    createReservation({
-      ...formData,
-      people: Number(formData.people),
-    });
-  
-    history.push(`/dashboard?date=${formData.reservation_date}`);
-  }
+    // DATE VALIDATION //
+
+    // Checks whether the date is on a Tuesday
+    if (new Date(formData.reservation_date).getDay() === 1) {
+      errors +=
+        "Our restaurant is closed on Tuesdays. Please select a different day.";
+    }
+    // Checks whether the date is in the past
+    if (
+      formData.reservation_date < today() ||
+      (formData.reservation_date === today() &&
+        formData.reservation_time <= currentTime())
+    ) {
+      errors += ` The reservation date cannot be in the past. Please pick a date in the future.`;
+    } else {
+      setError(null);
+    }
+
+    // TIME VALIDATION //
+
+    const requestedTime = new Date(
+      formData.reservation_date + " " + formData.reservation_time
+    );
+    const openingTime = new Date(`${formData.reservation_date} 10:30:00`);
+    const lastCallTime = new Date(`${formData.reservation_date} 21:30:00`);
+    // Checks whether the reservation time is before 10:30 am and after 9:30 pm
+    if (requestedTime < openingTime || requestedTime > lastCallTime) {
+      errors += ` Please select a time between 10:30 AM (restaurant closes) and 9:30 PM (last call before closing at 10:30 PM); Time Requested: ${formData.reservation_time}`;
+    } else {
+      setError(null);
+    }
+
+    // Pushes all the errors, if any, into the 'errors' array and set 'error' to the 'errors' array which will be displayed through the 'ErrorAlert' component
+    if (errors.length) {
+      setError({ message: errors });
+    }
+
+    if (!errors) {
+      createReservation({
+        ...formData,
+        people: Number(formData.people),
+      });
+      history.push(`/dashboard?date=${formData.reservation_date}`);
+    } else return null;
   };
 
   return (

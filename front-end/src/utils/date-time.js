@@ -84,6 +84,6 @@ export function next(currentDate) {
 
 // Get current time in timeFormat
 export function currentTime() {
-  return formatAsTime(new Date().toTimeString());
+  return formatAsTime(new Date().toLocaleString("en-US-u-hc-h24", {timeZone: "America/New_York"}));
 }
 

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import ReservationList from "./reservation/ReservationList";
 import { previous, next, today } from "../utils/date-time";
 import useQuery from "../utils/useQuery";
-import {useHistory} from "react-router-dom"
+import { useHistory } from "react-router-dom";
+import { listReservations } from "../utils/api";
 
 function Dashboard() {
   const todayDate = today();
@@ -11,7 +12,6 @@ function Dashboard() {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const [date, setDate] = useState(todayDate);
-
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -36,18 +36,20 @@ function Dashboard() {
   const previousHandler = (event) => {
     event.preventDefault();
     setDate(previous(date));
-    history.push(`/dashboard?date=${previous(date)}`)
+    history.push(`/dashboard?date=${previous(date)}`);
   };
   const todayHandler = (event) => {
     event.preventDefault();
     setDate(todayDate);
-    history.push(`/dashboard?date=${todayDate}`)
+    history.push(`/dashboard?date=${todayDate}`);
   };
   const nextHandler = (event) => {
     event.preventDefault();
     setDate(next(date));
-    history.push(`/dashboard?date=${next(date)}`)
+    history.push(`/dashboard?date=${next(date)}`);
   };
+
+
 
   return (
     <main>
@@ -55,10 +57,10 @@ function Dashboard() {
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for {date}</h4>
       </div>
-      <ErrorAlert error={reservationsError} />
-
-      {JSON.stringify(reservations)}
-
+        <ErrorAlert error={reservationsError} />
+      <div>
+        <ReservationList reservations={reservations} />
+      </div>
       <div className="row">
         <button className="btn btn-primary btn ml-3" onClick={previousHandler}>
           Previous Day
@@ -70,9 +72,6 @@ function Dashboard() {
           Next Day
         </button>
       </div>
-    <div>
-    </div>
-
     </main>
   );
 }
