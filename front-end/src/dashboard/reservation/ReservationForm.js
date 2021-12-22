@@ -24,6 +24,7 @@ function ReservationForm() {
 
   // Changes the data values dynamically
   const changeHandler = ({ target }) => {
+    setError(null)
     setFormData({
       ...formData,
       [target.name]: target.value,

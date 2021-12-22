@@ -105,8 +105,8 @@ function validateProperties(req, res, next) {
   if (requestedTime < openingTime || requestedTime > lastCallTime) {
     return next({
       status: 400,
-      message: `Please select a time between 10:30 AM (restaurant closes) and 9:30 PM (last call before closing at 10:30 PM); Time Requested: ${data.reservation_time}`
-    })
+      message: `Please select a time between 10:30 AM (restaurant closes) and 9:30 PM (last call before closing at 10:30 PM); Time Requested: ${data.reservation_time}`,
+    });
   }
   return next();
 }

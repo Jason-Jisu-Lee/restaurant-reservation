@@ -18,8 +18,8 @@ function create(reservation) {
   return knex("reservations")
     .insert(reservation)
     .returning("*")
-    .then((data) => {
-      return data[0];
+    .then((newReservation) => {
+      return newReservation[0];
     });
 }
 

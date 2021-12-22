@@ -1,9 +1,9 @@
 import React from "react";
-
+import Seat from "../dashboard/table/Seat";
 import { Redirect, Route, Switch } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
 import NotFound from "./NotFound";
-import Table from "../dashboard/table/Table";
+import TableForm from "../dashboard/table/TableForm";
 import { today } from "../utils/date-time";
 import ReservationForm from "../dashboard/reservation/ReservationForm";
 
@@ -15,11 +15,15 @@ function Routes() {
       </Route>
 
       <Route path="/tables/new">
-        <Table />
+        <TableForm />
       </Route>
 
       <Route exact path="/reservations/new">
         <ReservationForm />
+      </Route>
+
+      <Route path="/reservations/:reservation_id/seat">
+        <Seat />
       </Route>
 
       <Route exact path="/reservations">
