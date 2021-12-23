@@ -4,6 +4,7 @@ const {
   validProperties,
   validPropertiesUpdate,
   validTable,
+  validTableId,
   reservationExists,
   tableExists,
 } = require("./tables.middleware");
@@ -30,6 +31,14 @@ async function updateTable(req, res) {
   res.json({ updatedTable });
 }
 
+// Updates a table's reservation id to change the status back to "Free"
+async function destroy(req, res) {
+  const { table } = res.locals;
+  await service.finish(table.table_id);
+  const data = await service.list();
+  res.json({ data });
+}
+
 module.exports = {
   list,
   create: [validProperties, asyncErrorBoundary(create)],
@@ -40,4 +49,7 @@ module.exports = {
     validTable,
     asyncErrorBoundary(updateTable),
   ],
+  delete: [asyncErrorBoundary(tableExists),
+    validTableId,
+    asyncErrorBoundary(destroy)],
 };

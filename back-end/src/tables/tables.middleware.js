@@ -11,7 +11,7 @@ async function tableExists(req, res, next) {
   }
   next({
     status: 404,
-    message: `table_id ${table_id} does not exist`,
+    message: `table_id ${tableId} does not exist`,
   });
 }
 
@@ -70,13 +70,26 @@ function validTable(req, res, next) {
   if (table.capacity < reservation.people) {
     return next({
       status: 400,
-      message: "The number of people exceeds the maximum capacity of the table.",
+      message:
+        "The number of people exceeds the maximum capacity of the table.",
     });
   }
   if (table.reservation_id) {
     return next({
       status: 400,
       message: "The table is occupied. Please select another table",
+    });
+  }
+  return next();
+}
+
+function validTableId(req, res, next) {
+  const { table } = res.locals;
+  if (!table.reservation_id) {
+    return next({
+      status: 400,
+      message:
+        "The table is not occupied",
     });
   }
   return next()
@@ -87,5 +100,6 @@ module.exports = {
   validPropertiesUpdate,
   reservationExists,
   tableExists,
-  validTable
+  validTable,
+  validTableId
 };
