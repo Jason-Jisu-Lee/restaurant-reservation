@@ -83,6 +83,7 @@ function validTable(req, res, next) {
   return next();
 }
 
+// Checks whether the table is already free
 function validTableId(req, res, next) {
   const { table } = res.locals;
   if (!table.reservation_id) {
@@ -95,11 +96,26 @@ function validTableId(req, res, next) {
   return next()
 }
 
+
+// Checks whether a reservation assigned to the table already has "seated" status 
+function seatedReservation(req, res, next) {
+  const { reservation } = res.locals;
+  if (reservation.status === "seated") {
+    return next({
+      status: 400,
+      message:
+        "The reservation has already been seated.",
+    });
+  }
+  next()
+}
+
 module.exports = {
   validProperties,
   validPropertiesUpdate,
   reservationExists,
   tableExists,
   validTable,
-  validTableId
+  validTableId,
+  seatedReservation
 };

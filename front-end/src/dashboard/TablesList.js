@@ -3,15 +3,14 @@ import { useHistory } from "react-router-dom";
 import { finishTable } from "../utils/api";
 
 function TablesList({ tables }) {
-  const history = useHistory()
+  const history = useHistory();
 
   // If the table's reservation_id is not null, change the status to "Occupied" from "Free"
   // Clicking "Finish" will change the status back to "Free" from "Occupied" by sending a 'DELETE' request
   const tableList = tables.map((table, key) => {
     const finishHandler = () => {
-      if(window.confirm("Is this table ready to seat new guests?")) {
-        finishTable(table.table_id)
-        .then(() => history.go(0))
+      if (window.confirm("Is this table ready to seat new guests?")) {
+        finishTable(table.table_id).then(() => history.go(0));
       }
     };
     const status = !table.reservation_id ? "Free" : "Occupied";

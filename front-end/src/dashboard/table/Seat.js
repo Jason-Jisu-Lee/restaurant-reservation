@@ -6,7 +6,7 @@ import { listTables, updateSeat, readReservation } from "../../utils/api";
 
 function Seat() {
   const [tables, setTables] = useState([]);
-  const [reservation, setReservation] = useState({})
+  const [reservation, setReservation] = useState({});
   const [error, setError] = useState(null);
   const [table_id, setTableID] = useState("");
 
@@ -17,14 +17,19 @@ function Seat() {
   useEffect(() => {
     const abortController = new AbortController();
     setTables([]);
-    setReservation({})
+    setReservation({});
     async function loadTables() {
       try {
         const loadTables = await listTables(abortController.signal);
-        const freeTables = loadTables.filter((table) => table.reservation_id === null)
-        const loadReservation = await readReservation(reservation_id, abortController.signal)
+        const freeTables = loadTables.filter(
+          (table) => table.reservation_id === null
+        );
+        const loadReservation = await readReservation(
+          reservation_id,
+          abortController.signal
+        );
         setTables(freeTables);
-        setReservation(loadReservation)
+        setReservation(loadReservation);
       } catch (errors) {
         setError(errors);
       }
@@ -35,13 +40,17 @@ function Seat() {
 
   // Check whether the table can fit the party
   const changeHandler = ({ target }) => {
-    const findTable = tables.find((table) => Number(target.value) === table.table_id)
-    if(!findTable) {
-      setError({message: `Select a table`})
+    const findTable = tables.find(
+      (table) => Number(target.value) === table.table_id
+    );
+    if (!findTable) {
+      setError({ message: `Select a table` });
     } else if (findTable.capacity < reservation.people) {
-      setError({message: `Select a table with larger capacity that can fit the entire party`})
+      setError({
+        message: `Select a table with larger capacity that can fit the entire party`,
+      });
     } else {
-      setError(null)
+      setError(null);
     }
     setTableID(Number(target.value));
   };
@@ -49,9 +58,10 @@ function Seat() {
   // Update the table data to assign the given reservation id and send the user to dashboard
   const submitHandler = (event) => {
     event.preventDefault();
-    if(!error) {
-    updateSeat(table_id, reservation_id)
-    .then(() => history.push(`/dashboard`))
+    if (!error) {
+      updateSeat(table_id, reservation_id).then(() =>
+        history.push(`/dashboard`)
+      );
     }
   };
 

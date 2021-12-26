@@ -23,8 +23,17 @@ function create(reservation) {
     });
 }
 
+// Updates reservation status from "booked" to "seated"
+function updateStatus(reservation_id, status) {
+  return knex("reservations")
+    .select("*")
+    .where({ reservation_id })
+    .update({ status }, "*");
+}
+
 module.exports = {
   list,
   create,
   read,
+  updateStatus,
 };

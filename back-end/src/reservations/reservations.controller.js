@@ -1,21 +1,11 @@
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const service = require("./reservations.service");
-const { validateProperties } = require("./reservations.middleware");
-
-// Checks whether a reservation with the given id exists
-async function reservationExists(req, res, next) {
-  const { reservationId } = req.params;
-  const reservation = await service.read(reservationId);
-  if (reservation) {
-    res.locals.reservation = reservation;
-    return next();
-  } else {
-    return next({
-      status: 404,
-      message: `Reservation does not exist with the following id: ${reservationId}.`,
-    });
-  }
-}
+const {
+  validateProperties,
+  validateStatus,
+  reservationExists,
+  validateStatusFinished,
+} = require("./reservations.middleware");
 
 // Lists reservations by date
 async function list(req, res) {
@@ -23,6 +13,7 @@ async function list(req, res) {
   const data = await service.list(date);
   res.json({ data });
 }
+
 
 // Loads a reservation with the given id
 async function read(req, res) {
@@ -36,8 +27,21 @@ async function create(req, res) {
   res.status(201).json({ data: reservation });
 }
 
+// Updates reservation status from "booked" to "seated"
+async function updateStatus(req, res) {
+  const { reservation } = res.locals;
+  const { status } = req.body.data;
+  await service.updateStatus(reservation.reservation_id, status);
+  res.json({ data: { status } });
+}
+
 module.exports = {
-  list,
+  list: [asyncErrorBoundary(list)],
   read: [asyncErrorBoundary(reservationExists), read],
-  create: [validateProperties, asyncErrorBoundary(create)],
+  create: [validateProperties, validateStatus, asyncErrorBoundary(create)],
+  update: [
+    asyncErrorBoundary(reservationExists),
+    validateStatusFinished,
+    asyncErrorBoundary(updateStatus),
+  ],
 };

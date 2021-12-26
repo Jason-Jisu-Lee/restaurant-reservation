@@ -1,3 +1,5 @@
+const service = require("./reservations.service");
+
 const timeFormat = /\d\d:\d\d/;
 
 function asDateString(date) {
@@ -108,9 +110,59 @@ function validateProperties(req, res, next) {
       message: `Please select a time between 10:30 AM (restaurant closes) and 9:30 PM (last call before closing at 10:30 PM); Time Requested: ${data.reservation_time}`,
     });
   }
-  return next();
+  next();
+}
+
+// Checks whether the reservation status is "seated" or "finished"
+function validateStatus(req, res, next) {
+  const { data = {} } = req.body;
+  if (data.status === "seated" || data.status === "finished") {
+    return next({
+      status: 400,
+      message: `The reservation has already been seated or is finished`,
+    });
+  }
+  next();
+}
+
+// Checks whether a reservation with the given id exists
+async function reservationExists(req, res, next) {
+  const { reservationId } = req.params;
+  const reservation = await service.read(reservationId);
+  if (reservation) {
+    res.locals.reservation = reservation;
+    return next();
+  } else {
+    return next({
+      status: 404,
+      message: `Reservation does not exist with the following id: ${reservationId}.`,
+    });
+  }
+}
+
+// Checks whether the reservation has a "finished" or unknown status
+function validateStatusFinished(req, res, next) {
+  const { reservation } = res.locals;
+  const status = req.body.data.status;
+  if (reservation.status === "finished") {
+    return next({
+      status: 400,
+      message: `Reservation is currently finished.`,
+    });
+  }
+  const properStatus = ["booked", "seated", "finished", "cancelled"];
+  if (!properStatus.includes(status)) {
+    return next({
+      status: 400,
+      message: `Reservation has an unknown status.`,
+    });
+  }
+  next();
 }
 
 module.exports = {
   validateProperties,
+  validateStatus,
+  reservationExists,
+  validateStatusFinished,
 };
