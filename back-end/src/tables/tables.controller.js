@@ -1,5 +1,6 @@
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const service = require("./tables.service");
+const serviceR = require("../reservations/reservations.service")
 const {
   validProperties,
   validPropertiesUpdate,
@@ -35,8 +36,9 @@ async function updateTable(req, res) {
 // Updates a table's reservation id to change the status back to "Free"
 async function finish(req, res) {
   const { table } = res.locals;
-  await service.finishTable(table.table_id, table.reservation_id);
-  res.status(200).json({ data: {} });
+  await serviceR.finish(table.reservation_id)
+  const data = await service.finishTable(table.table_id, table.reservation_id);
+  res.status(200).json({ data });
 }
 
 module.exports = {

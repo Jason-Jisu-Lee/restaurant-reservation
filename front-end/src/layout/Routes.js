@@ -1,6 +1,7 @@
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import Seat from "../dashboard/table/Seat";
+import Search from "../dashboard/search/Search"
 import Dashboard from "../dashboard/Dashboard";
 import NotFound from "./NotFound";
 import TableForm from "../dashboard/table/TableForm";
@@ -13,7 +14,9 @@ function Routes() {
       <Route exact path="/">
         <Redirect to={"/dashboard"} />
       </Route>
-
+      <Route path="/search">
+        <Search />
+      </Route>
       <Route path="/tables/new">
         <TableForm />
       </Route>

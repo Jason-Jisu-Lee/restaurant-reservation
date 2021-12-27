@@ -9,11 +9,17 @@ const {
 
 // Lists reservations by date
 async function list(req, res) {
-  const { date } = req.query;
-  const data = await service.list(date);
+  const { date = null, mobile_number = null } = req.query;
+  if (date) {
+    const results = await service.list(date);
+    const data = results.filter(
+      (reservation) => reservation.status !== "finished"
+    );
+    return res.json({ data });
+  }
+  const data = await service.search(mobile_number);
   res.json({ data });
 }
-
 
 // Loads a reservation with the given id
 async function read(req, res) {
@@ -36,7 +42,7 @@ async function updateStatus(req, res) {
 }
 
 module.exports = {
-  list: [asyncErrorBoundary(list)],
+  list: asyncErrorBoundary(list),
   read: [asyncErrorBoundary(reservationExists), read],
   create: [validateProperties, validateStatus, asyncErrorBoundary(create)],
   update: [

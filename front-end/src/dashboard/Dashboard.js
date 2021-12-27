@@ -20,23 +20,28 @@ function Dashboard() {
   // Loads reservation
   useEffect(() => {
     const abortController = new AbortController();
-    setReservations([]);
-    listReservations({ date }, abortController.signal)
-      .then(setReservations)
-      .catch(setError);
+    async function loadReservations() {
+      try {
+        const loadR = await listReservations({ date }, abortController.signal);
+        setReservations(loadR)
+      } catch (errors) {
+        setError({message: errors});
+      }
+    }
+    loadReservations();
     return () => abortController.abort();
   }, [date]);
 
   // Loads all tables
-
   useEffect(() => {
+    setTables([])
     const abortController = new AbortController();
     async function loadTables() {
       try {
         const loadTables = await listTables(abortController.signal);
         setTables(loadTables);
       } catch (errors) {
-        setError(errors);
+        setError({ message: errors });
       }
     }
     loadTables();

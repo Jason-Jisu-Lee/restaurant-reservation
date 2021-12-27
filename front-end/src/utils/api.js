@@ -65,6 +65,16 @@ export async function listReservations(params, signal) {
     .then(formatReservationTime);
 }
 
+export async function listReservationsSearch(phoneQuery, signal) {
+  const url = `${API_BASE_URL}/reservations?mobile_number=${phoneQuery}`;
+  const options = {
+    method: "GET",
+    headers,
+    signal,
+  };
+  return await fetchJson(url, options);
+}
+
 // Creates reservation
 export async function createReservation(reservation, signal) {
   const url = `${API_BASE_URL}/reservations`;
@@ -125,15 +135,3 @@ export async function finishTable(table_id, signal) {
   };
   return await fetchJson(url, options, {});
 }
-
-// Updates reservation status from "booked" to "seated"
-// export async function updateReservation(reservation_id, status, signal) {
-//   const url = `${API_BASE_URL}/reservations/${reservation_id}/status`
-//   const options = {
-//     method: "PUT",
-//     headers,
-//     body: JSON.stringify({data: { status } }),
-//     signal,
-//   };
-//   return await fetchJson(url, options, {});
-// }

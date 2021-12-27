@@ -1,6 +1,8 @@
 import React from "react";
 
 function ReservationList({ reservations }) {
+  // Maps reservations array to show each reservation's properties
+  // Do not show reservations with a "finished" status
   const reservation = reservations.map((reservation, key) => {
     const showSeat =
       reservation.status === "booked" ? (
@@ -10,7 +12,6 @@ function ReservationList({ reservations }) {
       ) : (
         "-"
       );
-
     if (reservation.status !== "finished") {
     return (
       <tbody key={key}>
@@ -29,6 +30,9 @@ function ReservationList({ reservations }) {
     ) } else return null;
   })
 
+  // Shows "No reservations found" if there is no reseravtion; otherwise, map reservations
+  const list = reservation.length === 0 ? <h4>No reservations found</h4> : reservation
+
   return (
     <div>
       <table className="table table-sm">
@@ -43,7 +47,7 @@ function ReservationList({ reservations }) {
             <td>Seating</td>
           </tr>
         </thead>
-        {reservation}
+        {list}
       </table>
     </div>
   );

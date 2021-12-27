@@ -1,45 +1,76 @@
-// import React, { useState } from "react";
-// import ReservationList from "../ReservationList";
-// import { readReservation } from "../../utils/api";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import useQuery from "../../utils/useQuery";
+import ReservationList from "../ReservationList";
+import ErrorAlert from "../../layout/ErrorAlert";
+import { listReservationsSearch } from "../../utils/api";
 
-// function Search() {
-//   /*
-//         <Route path="/search">
-//         <Search />
-//       </Route>
-//   */
-//   const [reservation, setReservation] = useState({});
+function Search() {
+  const history = useHistory();
+  const [reservations, setReservations] = useState([]);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [error, setError] = useState(null);
 
-//   const changeHandler = (target) => {}
+  // Use query to set phone number
+  const query = useQuery();
+  const queryPhone = query.get("mobile_number");
 
-//   const submitHandler = (event) => {
-//     event.preventDefault();
-//   };
+  // Loads reservations matching with the query mobile number if the query exists
+  useEffect(() => {
+    const abortController = new AbortController();
+    setError(null)
+    async function loadReservations() {
+      if (!queryPhone) return null;
+      try {
+        const lists = await listReservationsSearch(
+          queryPhone,
+          abortController.signal
+        );
+        setReservations(lists);
+      } catch (errors) {
+        setError(errors)
+      }
+    }
+    loadReservations();
+    return () => abortController.abort();
+  }, [queryPhone]);
 
-//   // pass on ReservationList component a "reservation"
+  // Sets the query
+  const submitHandler = (event) => {
+    event.preventDefault();
+    history.push(`/search?mobile_number=${phoneNumber}`)
+  };
 
-//   return (
-//     <div>
-//       <div>
-//         <h1>Search Reservation</h1>
-//       </div>
-//       <form>
-//         <label htmlFor="mobile_number">Phone Number</label>
-//         <input
-//           id="mobile_number"
-//           name="mobile_number"
-//           type="search"
-//           placeholder="Enter a customer's phone number"
-//         />
-//         <button type="submit" className="btn btn-primary">
-//           Find
-//         </button>
-//       </form>
-//       <div>
-//         <ReservationList reservation={reservation} />
-//       </div>
-//     </div>
-//   );
-// }
+  return (
+    <div>
+      <div>
+        <h1>Search Reservation</h1>
+      </div>
+      <ErrorAlert error={error} />
+      <form onSubmit={submitHandler}>
+        <label className="mr-2" htmlFor="mobile_number">
+          Phone Number
+        </label>
+        <input
+          required
+          id="mobile_number"
+          name="mobile_number"
+          type="search"
+          placeholder="Enter a customer's phone number"
+          onChange={(e) => setPhoneNumber(e.target.value)}
+          value={phoneNumber}
+          style={{ width: 245 }}
+          className="mr-5"
+        />
+        <button type="submit" className="btn btn-primary">
+          Find
+        </button>
+      </form>
+      <div className="mt-5">
+        <ReservationList reservations={reservations} />
+      </div>
+    </div>
+  );
+}
 
-// export default Search;
+export default Search;
