@@ -78,7 +78,7 @@ function TableForm() {
           Submit
         </button>
         <button
-          className="btn btn-primary btn ml-5"
+          className="btn btn-secondary btn ml-5"
           onClick={() => history.goBack()}
         >
           Cancel

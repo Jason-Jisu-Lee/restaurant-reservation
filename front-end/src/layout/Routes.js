@@ -20,11 +20,14 @@ function Routes() {
       <Route path="/tables/new">
         <TableForm />
       </Route>
-      <Route exact path="/reservations/new">
+      <Route path="/reservations/new">
         <ReservationForm />
       </Route>
-      <Route path="/reservations/:reservation_id/seat">
+      <Route exact path="/reservations/:reservation_id/seat">
         <Seat />
+      </Route>
+      <Route exact path="/reservations/:reservation_id/edit">
+        <ReservationForm />
       </Route>
       <Route exact path="/reservations">
         <Redirect to={"/dashboard"} />

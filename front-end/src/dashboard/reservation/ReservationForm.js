@@ -1,12 +1,21 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { createReservation } from "../../utils/api";
-import { today, currentTime } from "../../utils/date-time";
+import React, { useState, useEffect } from "react";
+import { useHistory, useParams } from "react-router-dom";
+import {
+  createReservation,
+  editReservation,
+  readReservation,
+} from "../../utils/api";
+import { today, currentTime, formatAsDate } from "../../utils/date-time";
 import ErrorAlert from "../../layout/ErrorAlert";
+
+// Formats date for reservation data called with id
+function formatDate(reservation) {
+  reservation.reservation_date = formatAsDate(reservation.reservation_date);
+  return reservation;
+}
 
 function ReservationForm() {
   // Formats reservation date to set default value to today
-
   const history = useHistory();
   const [error, setError] = useState(null);
 
@@ -19,12 +28,42 @@ function ReservationForm() {
     mobile_number: "",
     people: 1,
   };
-
   const [formData, setFormData] = useState(initialData);
+  const [editData, setEditData] = useState(initialData);
+
+  // Loads the reservation with a given id from params, pre-filling the data
+  const { reservation_id } = useParams();
+  useEffect(() => {
+    const abortController = new AbortController();
+    async function loadReservation() {
+      try {
+        const reservationData = await readReservation(
+          reservation_id,
+          abortController.signal
+        );
+        // set the reservationData like (...formData, reservation_date: CHANGE FORMAT)
+        setEditData(formatDate(reservationData));
+      } catch (errors) {
+        setError(errors);
+      }
+    }
+    if (reservation_id) {
+      loadReservation();
+    }
+    return () => abortController.abort();
+  }, [reservation_id]);
 
   // Changes the data values dynamically
+  // If reservation_id is found in the query, use "editData" to save data
   const changeHandler = ({ target }) => {
-    setError(null)
+    setError(null);
+
+    if (reservation_id) {
+      setEditData({
+        ...editData,
+        [target.name]: target.value,
+      });
+    }
     setFormData({
       ...formData,
       [target.name]: target.value,
@@ -36,19 +75,23 @@ function ReservationForm() {
   const submitHandler = (event) => {
     event.preventDefault();
     let errors = "";
+    let currentForm = formData
+    if(reservation_id) {
+      currentForm = editData
+    }
 
     // DATE VALIDATION //
 
     // Checks whether the date is on a Tuesday
-    if (new Date(formData.reservation_date).getDay() === 1) {
+    if (new Date(currentForm.reservation_date).getDay() === 1) {
       errors +=
         "Our restaurant is closed on Tuesdays. Please select a different day.";
     }
     // Checks whether the date is in the past
     if (
-      formData.reservation_date < today() ||
-      (formData.reservation_date === today() &&
-        formData.reservation_time <= currentTime())
+      currentForm.reservation_date < today() ||
+      (currentForm.reservation_date === today() &&
+      currentForm.reservation_time <= currentTime())
     ) {
       errors += ` The reservation date cannot be in the past. Please pick a date in the future.`;
     } else {
@@ -58,13 +101,13 @@ function ReservationForm() {
     // TIME VALIDATION //
 
     const requestedTime = new Date(
-      formData.reservation_date + " " + formData.reservation_time
+      currentForm.reservation_date + " " + currentForm.reservation_time
     );
-    const openingTime = new Date(`${formData.reservation_date} 10:30:00`);
-    const lastCallTime = new Date(`${formData.reservation_date} 21:30:00`);
+    const openingTime = new Date(`${currentForm.reservation_date} 10:30:00`);
+    const lastCallTime = new Date(`${currentForm.reservation_date} 21:30:00`);
     // Checks whether the reservation time is before 10:30 am and after 9:30 pm
     if (requestedTime < openingTime || requestedTime > lastCallTime) {
-      errors += ` Please select a time between 10:30 AM (restaurant closes) and 9:30 PM (last call before closing at 10:30 PM); Time Requested: ${formData.reservation_time}`;
+      errors += ` Please select a time between 10:30 AM (restaurant closes) and 9:30 PM (last call before closing at 10:30 PM); Time Requested: ${currentForm.reservation_time}`;
     } else {
       setError(null);
     }
@@ -75,12 +118,20 @@ function ReservationForm() {
     }
 
     if (!errors) {
-      createReservation({
-        ...formData,
-        people: Number(formData.people),
-      });
-      history.push(`/dashboard?date=${formData.reservation_date}`);
-    } else return null;
+      // If "reservation_id" was found in the query, sends put request instead of post request
+      // And save the data on "editData"; otherwise, save the data on "formData" 
+      if (reservation_id) {
+        editReservation({
+          ...editData,
+          people: Number(editData.people),
+        }).then(() => history.push(`/dashboard?date=${editData.reservation_date}`))
+      } else {
+        createReservation({
+          ...formData,
+          people: Number(formData.people),
+        }).then(() =>history.push(`/dashboard?date=${formData.reservation_date}`))
+      }
+    }
   };
 
   return (
@@ -96,7 +147,9 @@ function ReservationForm() {
                 name="first_name"
                 type="text"
                 onChange={changeHandler}
-                value={formData.first_name}
+                value={
+                  reservation_id ? editData.first_name : formData.first_name
+                }
                 placeholder="First Name"
               />
             </div>
@@ -108,7 +161,7 @@ function ReservationForm() {
                 name="last_name"
                 type="text"
                 onChange={changeHandler}
-                value={formData.last_name}
+                value={reservation_id ? editData.last_name : formData.last_name}
                 placeholder="Last Name"
               />
             </div>
@@ -121,7 +174,9 @@ function ReservationForm() {
               name="mobile_number"
               type="tel"
               onChange={changeHandler}
-              value={formData.mobile_number}
+              value={
+                reservation_id ? editData.mobile_number : formData.mobile_number
+              }
               placeholder="123-456-7890"
             />
           </div>
@@ -134,7 +189,11 @@ function ReservationForm() {
                 name="reservation_date"
                 type="date"
                 onChange={changeHandler}
-                value={formData.reservation_date}
+                value={
+                  reservation_id
+                    ? editData.reservation_date
+                    : formData.reservation_date
+                }
               />
             </div>
             <div className="col-4">
@@ -145,7 +204,11 @@ function ReservationForm() {
                 name="reservation_time"
                 type="time"
                 onChange={changeHandler}
-                value={formData.reservation_time}
+                value={
+                  reservation_id
+                    ? editData.reservation_time
+                    : formData.reservation_time
+                }
               />
             </div>
           </div>
@@ -157,7 +220,7 @@ function ReservationForm() {
               name="people"
               type="number"
               onChange={changeHandler}
-              value={formData.people}
+              value={reservation_id ? editData.people : formData.people}
             />
           </div>
         </div>
@@ -168,7 +231,7 @@ function ReservationForm() {
           Submit
         </button>
         <button
-          className="btn btn-primary btn ml-5"
+          className="btn btn-secondary btn ml-5"
           onClick={() => history.goBack()}
         >
           Cancel

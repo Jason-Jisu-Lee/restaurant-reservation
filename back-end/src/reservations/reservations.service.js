@@ -49,11 +49,22 @@ function search(mobile_number) {
     .orderBy("reservation_date");
 }
 
+// Updates existing reservation's entire data
+function edit(reservation) {
+  return knex("reservations")
+  .select("*")
+  .where({ reservation_id: reservation.reservation_id})
+  .update(reservation)
+  .returning("*")
+  .then((updatedReservation) => updatedReservation[0])
+}
+
 module.exports = {
   list,
   create,
   read,
   updateStatus,
   search,
-  finish
+  finish,
+  edit
 };

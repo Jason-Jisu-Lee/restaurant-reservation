@@ -41,6 +41,12 @@ async function updateStatus(req, res) {
   res.json({ data: { status } });
 }
 
+// Updates existing reservation's entire data
+async function editReservation(req, res) {
+  const data = await service.edit(req.body.data);
+  res.json({ data });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   read: [asyncErrorBoundary(reservationExists), read],
@@ -49,5 +55,11 @@ module.exports = {
     asyncErrorBoundary(reservationExists),
     validateStatusFinished,
     asyncErrorBoundary(updateStatus),
+  ],
+  edit: [
+    asyncErrorBoundary(reservationExists),
+    validateProperties,
+    validateStatus,
+    asyncErrorBoundary(editReservation),
   ],
 };

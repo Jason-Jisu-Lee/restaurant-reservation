@@ -1,21 +1,18 @@
 const service = require("./reservations.service");
 
+// Aids in formatting current time using EST time zone
 const timeFormat = /\d\d:\d\d/;
-
 function asDateString(date) {
   return `${date.getFullYear().toString(10)}-${(date.getMonth() + 1)
     .toString(10)
     .padStart(2, "0")}-${date.getDate().toString(10).padStart(2, "0")}`;
 }
-
 function today() {
   return asDateString(new Date());
 }
-
 function formatAsTime(timeString) {
   return timeString.match(timeFormat)[0];
 }
-
 function currentTime() {
   return formatAsTime(
     new Date().toLocaleString("en-US-u-hc-h24", {
@@ -24,6 +21,7 @@ function currentTime() {
   );
 }
 
+// Checks whether the properties of requested body are valid
 function validateProperties(req, res, next) {
   const { data = {} } = req.body;
 

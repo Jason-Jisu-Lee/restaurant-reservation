@@ -17,7 +17,7 @@ function Dashboard() {
   const [date, setDate] = useState(todayDate);
   const [tables, setTables] = useState([]);
 
-  // Loads reservation
+  // Loads reservation with the given date
   useEffect(() => {
     const abortController = new AbortController();
     async function loadReservations() {

@@ -65,6 +65,7 @@ export async function listReservations(params, signal) {
     .then(formatReservationTime);
 }
 
+// Lists reservations that match the mobile number query
 export async function listReservationsSearch(phoneQuery, signal) {
   const url = `${API_BASE_URL}/reservations?mobile_number=${phoneQuery}`;
   const options = {
@@ -131,6 +132,32 @@ export async function finishTable(table_id, signal) {
   const options = {
     method: "DELETE",
     headers,
+    signal,
+  };
+  return await fetchJson(url, options, {});
+}
+
+// Sends a put request to edit existing reservation with a given id
+export async function editReservation(reservation, signal) {
+  const url = `${API_BASE_URL}/reservations/${reservation.reservation_id}`;
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: reservation }),
+    signal,
+  };
+  return await fetchJson(url, options, {})
+    .then(formatReservationDate)
+    .then(formatReservationTime);
+}
+
+// Updates reservation status (used only for "cancel" button to cancel reservations)
+export async function updateStatus(reservation_id, signal) {
+  const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: { status: "cancelled" } }),
     signal,
   };
   return await fetchJson(url, options, {});
