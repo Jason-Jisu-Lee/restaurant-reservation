@@ -1,7 +1,7 @@
 # Restaurant Reservation System
 
 ## Summary
-A restaurant schedule management application that allows the user to create/edit/delete reservations. The user can then create tables, assign capacity to the table and seat reservations.
+This is a full stack web-based restaurant schedule management application that allows the user to create/edit/delete reservations. The user can then create tables, assign capacity to the table and seat reservations.
 
 The reservations can be filtered by phone number and date, and sorted by their status among booked, seated, and finished.
 
