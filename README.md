@@ -31,28 +31,27 @@ The reservations can be filtered by phone number and date, and sorted by their s
 
 ## App Features
 
-### Creating A Reservation
-The user can create a reservation by clicking 'New Reservation' on the left navigation bar. This requires the customer's first name, last name, reservation date, reservation time, quantity of guests, and mobile number.
-
-![newReservation](https://github.com/Catrodigious/Thinkful-Final-Capstone/blob/main/images/newReservation.PNG)
-
-
 ### Managing Reservations
-The dashboard lists the reservations for today by default. The user can click the previous and next buttons on the top right of the reservations table to look at reservations in the past or future.
+The dashboard lists the reservations for today by default. The user can click 'previous' and 'next' button on top of the table to view past or future reservations.
 
-The tables and their availability are listed in the list on the on the far right of the page.
+The tables and their availability are listed under reservations.
 
-![dashboard](https://github.com/Catrodigious/Thinkful-Final-Capstone/blob/main/images/dashboard.PNG)
+![Dashboard](https://github.com/Jason-Jisu-Lee/restaurant-reservation/blob/main/images/Dashboard.png)
+
+### Creating A Reservation
+The user can create a reservation in the 'New Reservation' tab on the left navigation bar. The reservation requires the customer's first name, last name, reservation date, reservation time, quantity of guests, and mobile number.
+
+![NewReservation](https://github.com/Jason-Jisu-Lee/restaurant-reservation/blob/main/images/NewReservation.png)
 
 ### Searching for a Specific Reservation
-Users can search for a particular reservation by the mobile number associated with the reservation. This can be done by clicking the 'Search' option in the left-hand navigation.
+The user can search for a reservation(s) by the mobile number associated with the reservation in the 'Search' tab as well; the search function can detect partial matches and will list every reservation that matches the given number.
 
-![searchByMobile](https://github.com/Catrodigious/Thinkful-Final-Capstone/blob/main/images/searchByMobile.PNG)
+![Search](https://github.com/Jason-Jisu-Lee/restaurant-reservation/blob/main/images/Search.png)
 
 ### Managing Tables
-Expanding the restaurant? Create new tables by selecting the 'New Table' option in the left-hand navigation.
+The user can create new tables in the 'New Table' tab and assign its capacity.
 
-![newTable](https://github.com/Catrodigious/Thinkful-Final-Capstone/blob/main/images/newTable.PNG)
+![NewTable](https://github.com/Jason-Jisu-Lee/restaurant-reservation/blob/main/images/NewTable.png)
 
 
 ## API
