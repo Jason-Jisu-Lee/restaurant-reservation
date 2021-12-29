@@ -28,15 +28,6 @@ The reservations can be filtered by phone number and date, and sorted by their s
 | `/tables/:tableid/seat` | PUT | Seats a reservation at a table |
 | `/tables/:tableid/seat` | DELETE | Clears an occupied table |
 
-## Technology
-- JavaScript
-- HTML
-- CSS
-- React
-- Express
-- Knex
-- Postgres
-
 ## Features
 
 ### Create Reservation
@@ -50,19 +41,16 @@ The reservations can be filtered by phone number and date, and sorted by their s
     | `reservation_date` | `date` |
     | `reservation_time` | `str` |
     | `mobile_number` | `str` |
-
-
-
-
+    
+   
 ### Get Reservations by Date
 **GET** `/reservations?date=<reservation_date>`
-
 Returns reservations for a particular date
-
 
 
 ### Get Reservations by Id
  `/reservations/:reservation_id`
+
 
 #### Available Methods
 - **GET** - Returns a reservation given an existing reservation Id
@@ -79,18 +67,15 @@ Returns reservations for a particular date
     | `reservation_time` | `str` |
     | `mobile_number` | `str` |
 
+
 ### Get Reservation Status
 **GET** `/reservations/:reservation_id/status`
-
 Returns a status of [ `booked, seated, finished, cancelled` ] for the particular reservation
-
 
 
 ### Get Tables
 - **GET** `/tables`
-
 Returns the available tables.
-
 
 
 ### Create Table
@@ -105,7 +90,6 @@ Creates a table to be listed in the table list.
     | `capacity` | `int` |
 
 
-
 ### Update Table Status
 - **PUT** `/tables/:table_id/seat`
 
@@ -117,7 +101,6 @@ Sets table status to 'occupied' and ties a `restaurant_id` to it.
     | `reservation_id` | `int` |
 
 
-
 ### Finish Table
 - **DELETE** `/tables/:table_id/seat`
 
@@ -127,3 +110,12 @@ Sets the table status to `free` and the accompanying reservation status to `fini
     | ---------- | ---------- |
     | `reservation_id` | `int` |
 
+
+## Technology
+- JavaScript
+- HTML
+- CSS
+- React
+- Express
+- Knex
+- Postgres
