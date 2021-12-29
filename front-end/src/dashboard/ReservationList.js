@@ -1,6 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { updateStatus } from "../utils/api"
+import { updateStatus } from "../utils/api";
 
 function ReservationList({ reservations }) {
   const history = useHistory();
@@ -17,7 +17,8 @@ function ReservationList({ reservations }) {
       ) {
         updateStatus(reservation.reservation_id);
         history.go(0);
-      } return null
+      }
+      return null;
     };
     // Clicking the "Edit" button will take the user to 'ReservationForm' component with pre-filled information
     const showSeat =
@@ -75,15 +76,15 @@ function ReservationList({ reservations }) {
 
   return (
     <div>
-      <table className="table table-sm">
-        <thead>
+      <table className="table table-sm table-hover col-10">
+        <thead className="table-secondary">
           <tr>
-            <th scope="col">#</th>
-            <td>Name</td>
-            <td>Time</td>
-            <td>People</td>
-            <td>Phone</td>
-            <td>Status</td>
+            <th>#</th>
+            <td className="col-2">Name</td>
+            <td className="col-1">Time</td>
+            <td className="col-1">People</td>
+            <td className="col-2">Phone</td>
+            <td className="col-2">Status</td>
             <td>Action</td>
           </tr>
         </thead>

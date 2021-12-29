@@ -44,7 +44,7 @@ function Search() {
   return (
     <div>
       <div>
-        <h1>Search Reservation</h1>
+        <h1 className="center">Search Reservation</h1>
       </div>
       <ErrorAlert error={error} />
       <form onSubmit={submitHandler}>

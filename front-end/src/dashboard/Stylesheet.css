@@ -1,0 +1,44 @@
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 428px) {
+  .nav-btn {
+    font-size: 10pt;
+    min-width: 89px;
+    min-height: 30px;
+  }
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .nav-btn {
+    font-size: 14pt;
+    min-width: 80px;
+    min-height: 30px;
+    padding: 0px;
+  }
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  .nav-btn {
+    font-size: 12pt;
+    padding: 5px;
+  }
+}
+
+* {
+  font-family: "Roboto Slab";
+}
+
+.center {
+  text-align: center;
+}
+
+h1 {
+	font-weight: bold;
+	padding-bottom: 15pt
+}
+
+thead {
+	font-weight: bold;
+	font-size: 12pt
+}

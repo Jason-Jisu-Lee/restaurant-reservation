@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-
 import useQuery from "../utils/useQuery";
 import { listReservations, listTables } from "../utils/api";
 import { previous, next, today } from "../utils/date-time";
-
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationList from "./ReservationList";
 import TablesList from "./TablesList";
+
+import "./Stylesheet.css";
 
 function Dashboard() {
   const todayDate = today();
@@ -23,9 +23,9 @@ function Dashboard() {
     async function loadReservations() {
       try {
         const loadR = await listReservations({ date }, abortController.signal);
-        setReservations(loadR)
+        setReservations(loadR);
       } catch (errors) {
-        setError({message: errors});
+        setError({ message: errors });
       }
     }
     loadReservations();
@@ -34,7 +34,7 @@ function Dashboard() {
 
   // Loads all tables
   useEffect(() => {
-    setTables([])
+    setTables([]);
     const abortController = new AbortController();
     async function loadTables() {
       try {
@@ -78,21 +78,26 @@ function Dashboard() {
 
   return (
     <main>
-      <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for {date}</h4>
+      <div className="center">
+        <h1>Dashboard</h1>
       </div>
-      <ErrorAlert error={error} />
-      <div className="row">
-        <button className="btn btn-primary btn ml-3" onClick={previousHandler}>
-          Previous Day
-        </button>
-        <button className="btn btn-primary btn ml-3" onClick={todayHandler}>
-          Today
-        </button>
-        <button className="btn btn-primary btn ml-3" onClick={nextHandler}>
-          Next Day
-        </button>
+      <div>
+        <h4 className="mb-0 center">Reservations for {date}</h4>
+        <ErrorAlert error={error} />
+          <div className="center mt-4 mb-4">
+          <button
+            className="btn btn-primary btn ml-3"
+            onClick={previousHandler}
+          >
+            Previous Day
+          </button>
+          <button className="btn btn-primary btn ml-3" onClick={todayHandler}>
+            Today
+          </button>
+          <button className="btn btn-primary btn ml-3" onClick={nextHandler}>
+            Next Day
+          </button>
+          </div>
       </div>
       <ReservationList reservations={reservations} />
       <TablesList tables={tables} />

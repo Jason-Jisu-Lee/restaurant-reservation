@@ -22,7 +22,7 @@ function TableForm() {
         setError(null);
       }
     }
-    
+
     // Checks whether the 'capacity' property is at least one.
     if (target.name === "capacity") {
       if (target.value < 1) {
@@ -44,41 +44,60 @@ function TableForm() {
       createTable({
         ...formData,
         capacity: Number(formData.capacity),
-      });
-      history.push(`/dashboard`);
+      }).then(() => history.push(`/dashboard`));
     }
   };
 
   return (
     <div>
+      <h2 className="ml-3 mb-4 mt-3">Add a New Table</h2>
       <ErrorAlert error={error} />
       <form onSubmit={submitHandler}>
-        <label htmlFor="table_name">Table Name</label>
-        <input
-          required
-          id="table_name"
-          name="table_name"
-          type="text"
-          min="2"
-          onChange={changeHandler}
-          value={formData.table_name}
-        />
-
-        <label htmlFor="capacity">Table Capacity</label>
-        <input
-          required
-          id="capacity"
-          name="capacity"
-          min="1"
-          type="number"
-          onChange={changeHandler}
-          value={formData.capacity}
-        />
-        <button type="submit" className="btn btn-primary btn">
+        <div class="row g-3 align-items-center mb-4">
+          <div class="col-auto">
+            <label for="table_name" class="col-form-label mr-3">
+              Table Name
+            </label>
+          </div>
+          <div class="col-auto">
+            <input
+              required
+              id="table_name"
+              name="table_name"
+              type="text"
+              min="2"
+              onChange={changeHandler}
+              value={formData.table_name}
+              class="form-control-sm"
+            />
+          </div>
+          <div class="col-auto"></div>
+        </div>
+        <div class="row g-3 align-items-center mb-4">
+          <div class="col-auto">
+            <label htmlFor="capacity" class="col-form-label">
+              Table Capacity
+            </label>
+          </div>
+          <div class="col-auto">
+            <input
+              required
+              id="capacity"
+              name="capacity"
+              min="1"
+              type="number"
+              onChange={changeHandler}
+              value={formData.capacity}
+              class="form-control-sm"
+            />
+          </div>
+          <div class="col-auto"></div>
+        </div>
+        <button type="submit" className="btn btn-primary btn mt-1">
           Submit
         </button>
         <button
-          className="btn btn-secondary btn ml-5"
+          className="btn btn-secondary btn ml-5 mt-1"
           onClick={() => history.goBack()}
         >
           Cancel

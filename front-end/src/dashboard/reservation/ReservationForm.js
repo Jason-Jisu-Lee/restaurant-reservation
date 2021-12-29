@@ -75,9 +75,9 @@ function ReservationForm() {
   const submitHandler = (event) => {
     event.preventDefault();
     let errors = "";
-    let currentForm = formData
-    if(reservation_id) {
-      currentForm = editData
+    let currentForm = formData;
+    if (reservation_id) {
+      currentForm = editData;
     }
 
     // DATE VALIDATION //
@@ -91,7 +91,7 @@ function ReservationForm() {
     if (
       currentForm.reservation_date < today() ||
       (currentForm.reservation_date === today() &&
-      currentForm.reservation_time <= currentTime())
+        currentForm.reservation_time <= currentTime())
     ) {
       errors += ` The reservation date cannot be in the past. Please pick a date in the future.`;
     } else {
@@ -119,56 +119,72 @@ function ReservationForm() {
 
     if (!errors) {
       // If "reservation_id" was found in the query, sends put request instead of post request
-      // And save the data on "editData"; otherwise, save the data on "formData" 
+      // And save the data on "editData"; otherwise, save the data on "formData"
       if (reservation_id) {
         editReservation({
           ...editData,
           people: Number(editData.people),
-        }).then(() => history.push(`/dashboard?date=${editData.reservation_date}`))
+        }).then(() =>
+          history.push(`/dashboard?date=${editData.reservation_date}`)
+        );
       } else {
         createReservation({
           ...formData,
           people: Number(formData.people),
-        }).then(() =>history.push(`/dashboard?date=${formData.reservation_date}`))
+        }).then(() =>
+          history.push(`/dashboard?date=${formData.reservation_date}`)
+        );
       }
     }
   };
 
   return (
     <div>
+      <h2 className="mb-4 mt-3 center">Add a New Reservation</h2>
       <form onSubmit={submitHandler}>
-        <div>
-          <div className="row">
-            <div className="col-6">
-              <label htmlFor="first_name">First Name</label>
-              <input
-                required
-                id="first_name"
-                name="first_name"
-                type="text"
-                onChange={changeHandler}
-                value={
-                  reservation_id ? editData.first_name : formData.first_name
-                }
-                placeholder="First Name"
-              />
-            </div>
-            <div className="col-6">
-              <label htmlFor="last_name">Last Name</label>
-              <input
-                required
-                id="last_name"
-                name="last_name"
-                type="text"
-                onChange={changeHandler}
-                value={reservation_id ? editData.last_name : formData.last_name}
-                placeholder="Last Name"
-              />
-            </div>
-          </div>
-          <div className="row">
-            <label htmlFor="mobile_number">Mobile Number</label>
+        <div className="row mb-3">
+          <label className="col-sm-2 col-form-label" htmlFor="first_name">
+            First Name
+          </label>
+          <div className="col-sm-3">
             <input
+              className="form-control"
+              required
+              id="first_name"
+              name="first_name"
+              type="text"
+              onChange={changeHandler}
+              value={reservation_id ? editData.first_name : formData.first_name}
+              placeholder="First Name"
+            />
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label htmlFor="last_name" class="col-sm-2 col-form-label">
+            Last Name
+          </label>
+          <div class="col-sm-3">
+            <input
+              className="form-control"
+              required
+              id="last_name"
+              name="last_name"
+              type="text"
+              onChange={changeHandler}
+              value={reservation_id ? editData.last_name : formData.last_name}
+              placeholder="Last Name"
+            />
+          </div>
+        </div>
+
+        <div className="row mb-3">
+          <label htmlFor="mobile_number" className="col-sm-2 col-form-label">
+            Mobile Number
+          </label>
+          <div className="col-sm-3">
+            <input
+              className="form-control"
               required
               id="mobile_number"
               name="mobile_number"
@@ -180,41 +196,57 @@ function ReservationForm() {
               placeholder="123-456-7890"
             />
           </div>
-          <div className="row">
-            <div className="col-4">
-              <label htmlFor="reservation_date">Reservation Date</label>
-              <input
-                required
-                id="reservation_date"
-                name="reservation_date"
-                type="date"
-                onChange={changeHandler}
-                value={
-                  reservation_id
-                    ? editData.reservation_date
-                    : formData.reservation_date
-                }
-              />
-            </div>
-            <div className="col-4">
-              <label htmlFor="reservation_time">Reservation Time</label>
-              <input
-                required
-                id="reservation_time"
-                name="reservation_time"
-                type="time"
-                onChange={changeHandler}
-                value={
-                  reservation_id
-                    ? editData.reservation_time
-                    : formData.reservation_time
-                }
-              />
-            </div>
-          </div>
-          <div className="row">
-            <label htmlFor="people">Number of people in the party</label>
+        </div>
+
+        <div className="row mb-3">
+          <label className="col-sm-2 col-form-label" htmlFor="reservation_date">
+            Reservation Date
+          </label>
+          <div className="col-sm-2">
             <input
+              className="form-control"
+              required
+              id="reservation_date"
+              name="reservation_date"
+              type="date"
+              onChange={changeHandler}
+              value={
+                reservation_id
+                  ? editData.reservation_date
+                  : formData.reservation_date
+              }
+            />
+          </div>
+        </div>
+
+        <div className="row mb-3">
+          <label htmlFor="reservation_time" className="col-sm-2 col-form-label">
+            Reservation Time
+          </label>
+          <div className="col-sm-2">
+            <input
+              className="form-control"
+              required
+              id="reservation_time"
+              name="reservation_time"
+              type="time"
+              onChange={changeHandler}
+              value={
+                reservation_id
+                  ? editData.reservation_time
+                  : formData.reservation_time
+              }
+            />
+          </div>
+        </div>
+
+        <div className="row mb-3">
+          <label htmlFor="people" className="col-sm-2 col-form-label">
+            # of people in the party
+          </label>
+          <div className="col-sm-1">
+            <input
+              className="form-control"
               required
               id="people"
               name="people"
@@ -224,7 +256,7 @@ function ReservationForm() {
             />
           </div>
         </div>
-        <div>
+        <div className="center">
           <ErrorAlert error={error} />
         </div>
         <button type="submit" className="btn btn-primary btn">

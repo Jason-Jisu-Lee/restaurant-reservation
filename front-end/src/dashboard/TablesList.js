@@ -41,13 +41,13 @@ function TablesList({ tables }) {
 
   return (
     <div className="mt-4">
-      <table className="table table-sm">
-        <thead>
+      <table className="table table-sm table-hover col-10">
+        <thead className="table-secondary">
           <tr>
-            <th cope="col">Table</th>
-            <td>Capacity</td>
-            <td>Status</td>
-            <td>Reservation #</td>
+            <th className="col-1">Table</th>
+            <td className="col-2">Capacity</td>
+            <td className="col-1">Status</td>
+            <td className="col-3">Reservation #</td>
             <td>Finish</td>
           </tr>
         </thead>
