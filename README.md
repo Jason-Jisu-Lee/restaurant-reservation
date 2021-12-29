@@ -5,6 +5,8 @@ This is a full stack web-based restaurant schedule management application that a
 
 The reservations can be filtered by phone number and date, and sorted by their status among booked, seated, and finished.
 
+[Live Demo being deployed on the 12/30th](www.github.com)
+
 ## Installation
 
 1. Fork and clone this repository.
