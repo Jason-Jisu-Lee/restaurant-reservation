@@ -28,7 +28,34 @@ The reservations can be filtered by phone number and date, and sorted by their s
 | `/tables/:tableid/seat` | PUT | Seats a reservation at a table |
 | `/tables/:tableid/seat` | DELETE | Clears an occupied table |
 
-## Features
+
+## App Features
+
+### Creating A Reservation
+The user can create a reservation by clicking 'New Reservation' on the left navigation bar. This requires the customer's first name, last name, reservation date, reservation time, quantity of guests, and mobile number.
+
+![newReservation](https://github.com/Catrodigious/Thinkful-Final-Capstone/blob/main/images/newReservation.PNG)
+
+
+### Managing Reservations
+The dashboard lists the reservations for today by default. The user can click the previous and next buttons on the top right of the reservations table to look at reservations in the past or future.
+
+The tables and their availability are listed in the list on the on the far right of the page.
+
+![dashboard](https://github.com/Catrodigious/Thinkful-Final-Capstone/blob/main/images/dashboard.PNG)
+
+### Searching for a Specific Reservation
+Users can search for a particular reservation by the mobile number associated with the reservation. This can be done by clicking the 'Search' option in the left-hand navigation.
+
+![searchByMobile](https://github.com/Catrodigious/Thinkful-Final-Capstone/blob/main/images/searchByMobile.PNG)
+
+### Managing Tables
+Expanding the restaurant? Create new tables by selecting the 'New Table' option in the left-hand navigation.
+
+![newTable](https://github.com/Catrodigious/Thinkful-Final-Capstone/blob/main/images/newTable.PNG)
+
+
+## API
 
 ### Create Reservation
 **POST** `/reservations`
