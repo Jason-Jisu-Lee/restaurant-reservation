@@ -5,10 +5,10 @@
 ## Installation
 
 1. Fork and clone this repository.
-3. Update the `./back-end/.env` file with the connection URL's to your database instance.
-5. Include your backend connection within `./front-end/.env` (defaults to `http://localhost:5000`).
-6. Run `npm install` to install project dependencies.
-7. Run `npm run start` to start the server.
+2. Create and update `./back-end/.env` file with the connection URL's to your database instance.
+3. Create `./front-end/.env` file and include the backend connection within `./front-end/.env`.
+4. Run `npm install` to install project dependencies.
+5. Run `npm run start` to start the server.
 
 ## API Endpoints
 
