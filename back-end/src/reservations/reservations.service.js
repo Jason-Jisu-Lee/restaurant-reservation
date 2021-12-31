@@ -18,9 +18,7 @@ function create(reservation) {
   return knex("reservations")
     .insert(reservation)
     .returning("*")
-    .then((newReservation) => {
-      return newReservation[0];
-    });
+    .then((newReservation) => newReservation[0]);
 }
 
 // Updates reservation status from "booked" to "seated"
@@ -52,11 +50,11 @@ function search(mobile_number) {
 // Updates existing reservation's entire data
 function edit(reservation) {
   return knex("reservations")
-  .select("*")
-  .where({ reservation_id: reservation.reservation_id})
-  .update(reservation)
-  .returning("*")
-  .then((updatedReservation) => updatedReservation[0])
+    .select("*")
+    .where({ reservation_id: reservation.reservation_id })
+    .update(reservation)
+    .returning("*")
+    .then((updatedReservation) => updatedReservation[0]);
 }
 
 module.exports = {
@@ -66,5 +64,5 @@ module.exports = {
   updateStatus,
   search,
   finish,
-  edit
+  edit,
 };

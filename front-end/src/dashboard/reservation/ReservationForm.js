@@ -30,9 +30,13 @@ function ReservationForm() {
   };
   const [formData, setFormData] = useState(initialData);
   const [editData, setEditData] = useState(initialData);
+  const { reservation_id } = useParams();
+  let currentForm = formData;
+  if (reservation_id) {
+    currentForm = editData;
+  }
 
   // Loads the reservation with a given id from params, pre-filling the data
-  const { reservation_id } = useParams();
   useEffect(() => {
     const abortController = new AbortController();
     async function loadReservation() {
@@ -75,10 +79,6 @@ function ReservationForm() {
   const submitHandler = (event) => {
     event.preventDefault();
     let errors = "";
-    let currentForm = formData;
-    if (reservation_id) {
-      currentForm = editData;
-    }
 
     // DATE VALIDATION //
 
@@ -160,11 +160,11 @@ function ReservationForm() {
           </div>
         </div>
 
-        <div class="row mb-3">
-          <label htmlFor="last_name" class="col-sm-2 col-form-label">
+        <div className="row mb-3">
+          <label htmlFor="last_name" className="col-sm-2 col-form-label">
             Last Name
           </label>
-          <div class="col-sm-3">
+          <div className="col-sm-3">
             <input
               className="form-control"
               required

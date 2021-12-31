@@ -53,13 +53,13 @@ function TableForm() {
       <h2 className="ml-3 mb-4 mt-3">Add a New Table</h2>
       <ErrorAlert error={error} />
       <form onSubmit={submitHandler}>
-        <div class="row g-3 align-items-center mb-4">
-          <div class="col-auto">
-            <label for="table_name" class="col-form-label mr-3">
+        <div className="row g-3 align-items-center mb-4">
+          <div className="col-auto">
+            <label htmlFor="table_name" className="col-form-label mr-3">
               Table Name
             </label>
           </div>
-          <div class="col-auto">
+          <div className="col-auto">
             <input
               required
               id="table_name"
@@ -68,18 +68,18 @@ function TableForm() {
               min="2"
               onChange={changeHandler}
               value={formData.table_name}
-              class="form-control-sm"
+              className="form-control-sm"
             />
           </div>
-          <div class="col-auto"></div>
+          <div className="col-auto"></div>
         </div>
-        <div class="row g-3 align-items-center mb-4">
-          <div class="col-auto">
-            <label htmlFor="capacity" class="col-form-label">
+        <div className="row g-3 align-items-center mb-4">
+          <div className="col-auto">
+            <label htmlFor="capacity" className="col-form-label">
               Table Capacity
             </label>
           </div>
-          <div class="col-auto">
+          <div className="col-auto">
             <input
               required
               id="capacity"
@@ -88,10 +88,10 @@ function TableForm() {
               type="number"
               onChange={changeHandler}
               value={formData.capacity}
-              class="form-control-sm"
+              className="form-control-sm"
             />
           </div>
-          <div class="col-auto"></div>
+          <div className="col-auto"></div>
         </div>
         <button type="submit" className="btn btn-primary btn mt-1">
           Submit

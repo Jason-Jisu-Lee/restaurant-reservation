@@ -13,13 +13,6 @@ function today() {
 function formatAsTime(timeString) {
   return timeString.match(timeFormat)[0];
 }
-function currentTime() {
-  return formatAsTime(
-    new Date().toLocaleString("en-US-u-hc-h24", {
-      timeZone: "America/New_York",
-    })
-  );
-}
 
 // Checks whether the properties of requested body are valid
 function validateProperties(req, res, next) {
@@ -80,11 +73,11 @@ function validateProperties(req, res, next) {
   if (
     data.reservation_date < today() ||
     (data.reservation_date === today() &&
-      data.reservation_time <= currentTime())
+      data.reservation_time <= formatAsTime(new Date().toTimeString()))
   ) {
     return next({
       status: 400,
-      message: `The reservation date cannot be in the past. Please pick a date in the future.`,
+      message: `The reservation date cannot be in the past. Please select a date in the future.`,
     });
   }
 
