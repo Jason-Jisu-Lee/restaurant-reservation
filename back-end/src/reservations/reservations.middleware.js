@@ -1,6 +1,6 @@
 const service = require("./reservations.service");
 
-// Aids in formatting current time using EST time zone
+// Aids in formatting current time in UDT
 const timeFormat = /\d\d:\d\d/;
 function asDateString(date) {
   return `${date.getFullYear().toString(10)}-${(date.getMonth() + 1)
