@@ -30,6 +30,8 @@ function ReservationForm() {
   };
   const [formData, setFormData] = useState(initialData);
   const [editData, setEditData] = useState(initialData);
+
+  // If there is a reservtion_id found in params, set the currentForm to "editData" otherwise "formData"
   const { reservation_id } = useParams();
   let currentForm = formData;
   if (reservation_id) {
@@ -154,7 +156,7 @@ function ReservationForm() {
               name="first_name"
               type="text"
               onChange={changeHandler}
-              value={reservation_id ? editData.first_name : formData.first_name}
+              value={currentForm.first_name}
               placeholder="First Name"
             />
           </div>
@@ -172,7 +174,7 @@ function ReservationForm() {
               name="last_name"
               type="text"
               onChange={changeHandler}
-              value={reservation_id ? editData.last_name : formData.last_name}
+              value={currentForm.last_name}
               placeholder="Last Name"
             />
           </div>
@@ -190,9 +192,7 @@ function ReservationForm() {
               name="mobile_number"
               type="tel"
               onChange={changeHandler}
-              value={
-                reservation_id ? editData.mobile_number : formData.mobile_number
-              }
+              value={currentForm.mobile_number}
               placeholder="123-456-7890"
             />
           </div>
@@ -210,11 +210,7 @@ function ReservationForm() {
               name="reservation_date"
               type="date"
               onChange={changeHandler}
-              value={
-                reservation_id
-                  ? editData.reservation_date
-                  : formData.reservation_date
-              }
+              value={currentForm.reservation_date}
             />
           </div>
         </div>
@@ -231,11 +227,7 @@ function ReservationForm() {
               name="reservation_time"
               type="time"
               onChange={changeHandler}
-              value={
-                reservation_id
-                  ? editData.reservation_time
-                  : formData.reservation_time
-              }
+              value={currentForm.reservation_time}
             />
           </div>
         </div>
@@ -252,7 +244,7 @@ function ReservationForm() {
               name="people"
               type="number"
               onChange={changeHandler}
-              value={reservation_id ? editData.people : formData.people}
+              value={currentForm.people}
             />
           </div>
         </div>
