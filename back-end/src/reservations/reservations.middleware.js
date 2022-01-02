@@ -1,6 +1,6 @@
 const service = require("./reservations.service");
 
-// Aids in formatting current time in UDT
+// Aids in formatting current time in UTC
 const timeFormat = /\d\d:\d\d/;
 function asDateString(date) {
   return `${date.getFullYear().toString(10)}-${(date.getMonth() + 1)
@@ -62,10 +62,7 @@ function validateProperties(req, res, next) {
   }
 
   // Checks whether 'reservation_date' property is a Tuesday
-  if (new Date(data.reservation_date).getDay() === 1) {
-    console.log(data.reservation_date)
-    console.log("today:", today())
-    console.log("getDay:", getDay())
+  if (new Date(data.reservation_date).getDay() === 2) {
     return next({
       status: 400,
       message: `Our restaurant is closed on Tuesdays. Please enter a valid date for the 'reservation_date' property: ${data.reservation_date}`,
