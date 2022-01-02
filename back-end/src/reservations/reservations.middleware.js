@@ -63,6 +63,9 @@ function validateProperties(req, res, next) {
 
   // Checks whether 'reservation_date' property is a Tuesday
   if (new Date(data.reservation_date).getDay() === 1) {
+    console.log(data.reservation_date)
+    console.log("today:", today())
+    console.log("getDay:", getDay())
     return next({
       status: 400,
       message: `Our restaurant is closed on Tuesdays. Please enter a valid date for the 'reservation_date' property: ${data.reservation_date}`,
